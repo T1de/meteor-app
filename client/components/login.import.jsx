@@ -58,7 +58,7 @@ export var Login = React.createClass({
                 <Grid>
                     <Row>
                         <Col xs={8} xsOffset={2}>
-                            <h2 className="form-signin-heading">Log in</h2>
+                            <h2 className="form-signin-heading center-text">Log in</h2>
                         </Col>
                     </Row>
 
@@ -88,6 +88,7 @@ export var Login = React.createClass({
                     <Link to="readings">
                         <button className="login" onClick={this.onSubmit}>Log In</button>
                     </Link>
+                    <button className="login login-facebook" onClick={this.loginFacebook}>Log In with Facebook</button>
 
                     <p>Don't have an account? <Link to="readings">Sign Up</Link></p>
                 </div>

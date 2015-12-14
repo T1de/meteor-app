@@ -13,6 +13,17 @@ import 'server/admin';
 
 Meteor.startup(function () {
 
+    if(Meteor.isClient) {
+        if(Meteor.user()) {
+            console.log('User is logged in.');
+            window.location.replace('http://meteor.local')
+        }
+        else {
+            console.log('User is not logged in.');
+            window.location.replace('http://meteor.local/login')
+        }
+    }
+
     Meteor.AppCache.config({
         chrome: true,
         chromium: true,

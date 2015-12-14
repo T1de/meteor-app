@@ -54,155 +54,6 @@ export default React.createClass({
 
 });
 
-var ViewManager = React.createClass({
-
-
-
-    render: function() {
-        return (
-          <div style={{}}>
-
-        );
-    }
-});
-
-var SampleComponent = React.createClass({
-    displayName: "SampleComponent",
-    swipingUp: function() {
-        console.log('Swiped!');
-    },
-    render: function () {
-        return (
-            <Swipeable
-                onSwipedRight={()=>this.swipingUp()}>
-                <div style={{height: "250px"}}>
-                    This element can be swiped
-                </div>
-            </Swipeable>
-        )
-    }
-});
-
-var NutritionSearch = React.createClass({
-    getInitialState: function() {
-        return {
-            value: '',
-            search: [{}],
-            searchTimeout: ''
-        };
-    },
-    setInitialState: function() {
-        return {
-            value: '',
-            search: [{}],
-            searchTimeout: ''
-        };
-    },
-    performSearch: function() {
-        var searchValue = this.refs.nux_search.getValue();
-
-        var component = this;
-
-        var timeoutId = setTimeout(function(){
-            if(component.state.searchTimeout)
-            {
-                component.setState({value: component.refs.nux_search.getValue(), search: component.state.search, searchTimeout: ''});
-                Meteor.call('search',  component.refs.nux_search.getValue(),
-                    function(error, data){
-                        console.log(data.data.hits);
-                        component.setState(
-                            {value: component.refs.nux_search.getValue(), search: data.data.hits, searchTimeout: ''}
-                        );
-
-                    }
-                );
-            }
-
-        },400);
-
-        this.setState({value: searchValue, search: this.state.search, searchTimeout: timeoutId});
-    },
-
-
-    render: function() {
-        return (
-            <div>
-                <Input
-                    type="text"
-                    value={this.state.value}
-                    placeholder="Search for food item"
-                    hasFeedback
-                    ref="nux_search"
-                    groupClassName="group-class"
-                    labelClassName="laabel-class"
-                    onChange={this.performSearch}
-                    />
-                <NutritionList results={this.state.search}/>
-            </div>
-        );
-    }
-});
-
-var NutritionList = React.createClass({
-    displayName: "NutritionList",
-    mixins: [React.addons.PureRenderMixin],
-
-    propTypes: {
-        results: React.PropTypes.object
-    },
-
-    render: function() {
-        return (
-            <table className="table table-striped">
-                <thead>
-                <tr>
-                    <th>Item</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.props.results.map(function(t){
-                    return (
-                        <NutritionItem item={t}/>
-                    );
-                })}
-                </tbody>
-            </table>
-        );
-    }
-});
-
-var NutritionItem = React.createClass({
-    selectItem: function(itemId) {
-        Meteor.call('getItem',  itemId,
-            function(error, data){
-                console.log(data.data.nf_total_carbohydrate);
-            }
-        );
-
-        console.log(itemId);
-    },
-
-    render: function() {
-        if(!this.props.item.fields){
-            return (<tr><td></td></tr>);
-        }
-        else {
-            return (
-                <tr>
-                    <td key={this.props.item._id}>{this.props.item.fields.item_name}</td>
-                    <td>
-                        <button className="btn btn-primary" onClick={() => this.selectItem(this.props.item.fields.item_id)}>
-                            Select
-                        </button>
-                    </td>
-                </tr>
-            );
-        }
-    }
-});
-
 var ReadingsList = React.createClass({
     displayName: "ReadingsList",
     mixins: [React.addons.PureRenderMixin],
@@ -253,8 +104,15 @@ var ReadingRow = React.createClass({
         if(this.props.reading.reading <= parseInt(max) && this.props.reading.reading >= parseInt(min)){
             return 'success';
         }
+        // If Reading is within 5% of the users target range.
+        //else if (this.props.reading.reading > parseInt(max * 1.05) || this.props.reading.reading > parseInt(min * 1.05)) {
+        //    return 'warning';
+        //}
         else if (this.props.reading.reading > parseInt(max) || this.props.reading.reading < parseInt(min)) {
             return 'danger';
+        }
+        else {
+            return ''
         }
     },
 
@@ -305,8 +163,11 @@ var ReadingRow = React.createClass({
                 onLeftClick={()=>this.deleteReading()}>
                 <div className="reading-row">
                     <div className="reading-body" >
-                        <div className="reading">{this.props.reading.reading}<span className="reading-label">mg/dl</span></div>
-                        <div className={this.getReadingClass() + ' reading-time'}>{moment(this.props.reading.created_at).fromNow()}</div>
+                        <div className={this.getReadingClass() + ' reading'}>{this.props.reading.reading}<span className="reading-label">mg/dl</span></div>
+                        <div className="" style={{display: 'inline-block', width: 'auto', padding: '20px'}}>
+                            <div className="">{this.props.reading.note}</div>
+                            <div className={this.getReadingClass() + ''}>{moment(this.props.reading.created_at).fromNow()}</div>
+                        </div>
                     </div>
                     <div className={this.state.open + ' reading-details'}>
                         <div className="reading-details-row">
