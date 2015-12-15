@@ -154,6 +154,12 @@ body {
     border: none;
     color: #ffffff;
     padding-top: 25px;
+    z-index: 10;
+    min-height: 50px;
+    margin-bottom: 20px;
+    position: fixed;
+    right: 0;
+    left: 0;
 }
 
 .bottom-nav-bar {
@@ -174,12 +180,25 @@ footer {
 
 /* Buttons */
 .circle-btn {
+    border-radius: 75px;
+    width: 75px;
+    height: 75px;
+    margin: 10px 0;
+    font-size: 24px;
     color: #777;
     background-color: rgba(255, 255, 255, 1.0);
     border: none;
     -webkit-box-shadow: 1px 1px 5px 1px rgba(255,255,255,0.4) !important;
     box-shadow: 1px 1px 5px 1px rgba(255,255,255,0.4) !important;
 }
+
+.rounded-btn {
+    border-radius: 25px;
+    background-color: #4CD964;
+    color: #ffffff;
+    padding: 10px 20px;
+}
+
 
 .tide-btn {
     width: 100%;
@@ -265,6 +284,7 @@ footer {
     padding: 20px;
     font-weight: 300;
     background-color: #ffffff;
+    color: #898C90;
 }
 
 .reading.warning {color: #FF9500}
@@ -423,6 +443,17 @@ input.tide-input {display: inline-block;}
 
 /* End Profile Page */
 
+.overlay-page {
+    text-align: center;
+    position: fixed;
+    background-color: #34AADC;
+    color: #ffffff;
+    z-index: 20;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 30px;
+}
 
 .stro-container {
     width: 300%;
@@ -440,8 +471,12 @@ input.tide-input {display: inline-block;}
     position: relative;
     display: inline-block;
     width: 33.33333333%;
-    height: 102px;
     vertical-align: middle;
+}
+
+.stro-left,
+.stro-right {
+    height: 102px;
 }
 
 .stro-button {

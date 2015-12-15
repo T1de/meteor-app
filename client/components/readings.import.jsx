@@ -6,7 +6,7 @@ import  { _, moment, bootbox, ReactBootstrap, Swipeable, SwipeToRevealOptions } 
 import Loading from 'client/components/loading';
 import { Readings } from 'lib/models/readingModel';
 
-var { Input, Button, ButtonToolbar } = ReactBootstrap;
+var { Input, Button, ButtonToolbar, Glyphicon } = ReactBootstrap;
 
 // An example of an application-specific component.
 
@@ -15,7 +15,12 @@ export default React.createClass({
     mixins: [ReactMeteorData],
     getInitialState: function() {
         return {
-            value: ''
+            showForm: false
+        };
+    },
+    setInitialState: function() {
+        return {
+            showForm: false
         };
     },
     getMeteorData: function() {
@@ -32,6 +37,15 @@ export default React.createClass({
             canWrite: user? Roles.userIsInRole(user, ['write', 'admin']) : false,
         };
     },
+    showForm: function() {
+        if(this.state.showForm) {
+            this.setState({showForm: false});
+        }
+        else {
+            this.setState({showForm: true});
+        }
+
+    },
     render: function() {
 
         // Show loading indicator if subscriptions are still downloading
@@ -42,8 +56,9 @@ export default React.createClass({
 
         return (
             <div className="app-body">
-                <div style={{margin: '50px 0'}}>
-                    <BGForm />
+                <BGForm showForm={this.state.showForm} hideOnClick={this.showForm}/>
+                <div className="center-text" style={{paddingTop: '30px'}}>
+                    <button className="rounded-btn" onClick={this.showForm}><Glyphicon glyph="plus"/> Add Entry</button>
                 </div>
                 <div className="reading-rows" style={{marginBottom: "20px"}}>
                     <ReadingsList readings={this.data.readings} />
@@ -64,7 +79,7 @@ var ReadingsList = React.createClass({
 
     render: function() {
         return (
-            <div style={{marginTop: '50px'}}>
+            <div style={{marginTop: '30px'}}>
             {this.props.readings.map(t => {
                 return (
                     <ReadingRow reading={t} key={t._id}/>
@@ -104,15 +119,8 @@ var ReadingRow = React.createClass({
         if(this.props.reading.reading <= parseInt(max) && this.props.reading.reading >= parseInt(min)){
             return 'success';
         }
-        // If Reading is within 5% of the users target range.
-        //else if (this.props.reading.reading > parseInt(max * 1.05) || this.props.reading.reading > parseInt(min * 1.05)) {
-        //    return 'warning';
-        //}
         else if (this.props.reading.reading > parseInt(max) || this.props.reading.reading < parseInt(min)) {
             return 'danger';
-        }
-        else {
-            return ''
         }
     },
 
@@ -159,7 +167,7 @@ var ReadingRow = React.createClass({
                 rightOptions={this.rightOptions}
                 callActionWhenSwipingFarRight={this.callActionWhenSwipingFarRight}
                 callActionWhenSwipingFarLeft={this.callActionWhenSwipingFarLeft}
-                onRightClick={(option)=>this.testMessage(option)}
+                onRightClick={(option)=>this.readingDetails()}
                 onLeftClick={()=>this.deleteReading()}>
                 <div className="reading-row">
                     <div className="reading-body" >
@@ -198,7 +206,42 @@ var RecordNewButton = React.createClass({
 
     render: function() {
         return (
-            <Button type='submit' bsStyle='success'>New Glucose Reading</Button>
+            <Button className="rounded-btn" type='submit' bsStyle='success'>Save</Button>
+        );
+    }
+});
+
+var Overlay = React.createClass({
+    displayName: "Overlay",
+    getInitialState: function() {
+        return {
+            class: 'overlay-page hide',
+        };
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+
+        var cssClass = '';
+
+        if(nextProps.showForm){
+            cssClass = 'overlay-page show animated slideInUp';
+        }
+        else {
+            cssClass = 'overlay-page animated slideOutDown';
+        }
+
+        this.setState({class: cssClass});
+    },
+
+    render: function() {
+        return (
+          <div className={this.state.class}>
+              <div style={{width: '100%', textAlign: 'left', paddingLeft: '25px'}}>
+                  <Glyphicon glyph="remove" onClick={this.props.hideOnClick}/>
+              </div>
+              {this.props.children}
+          </div>
+
         );
     }
 });
@@ -232,33 +275,44 @@ var BGForm = React.createClass({
             });
         },
 
+        getCss: function() {
+            if(this.props.showForm){
+                return 'overlay-page show animated slideInUp';
+            }
+            else {
+                return 'overlay-page hide';
+            }
+        },
+
         render: function() {
             return (
-                <form onSubmit={this.newReading} style={{textAlign: 'center'}}>
-                    <Input
-                        type="number"
-                        value={this.state.value}
-                        placeholder="0"
-                        hasFeedback
-                        ref="input"
-                        groupClassName="group-class tide-input large"
-                        labelClassName="label-class"
-                        onChange={this.handleChange}
-                        className="reading-input"
-                        />
-                    <Input
-                        type="text"
-                        value={this.state.note}
-                        placeholder="Note"
-                        hasFeedback
-                        ref="note"
-                        groupClassName="group-class tide-input"
-                        labelClassName="label-class"
-                        onChange={this.handleChange}
-                        className="reading-input"
-                        />
-                    <RecordNewButton onClick={this.newReading} />
-                </form>
+                <Overlay showForm={this.props.showForm} hideOnClick={this.props.hideOnClick}>
+                    <form onSubmit={this.newReading} style={{textAlign: 'center'}}>
+                        <Input
+                            type="number"
+                            value={this.state.value}
+                            placeholder="0"
+                            hasFeedback
+                            ref="input"
+                            groupClassName="group-class tide-input large"
+                            labelClassName="label-class"
+                            onChange={this.handleChange}
+                            className="reading-input"
+                            />
+                        <Input
+                            type="text"
+                            value={this.state.note}
+                            placeholder="Note"
+                            hasFeedback
+                            ref="note"
+                            groupClassName="group-class tide-input"
+                            labelClassName="label-class"
+                            onChange={this.handleChange}
+                            className="reading-input"
+                            />
+                        <RecordNewButton onClick={this.newReading} />
+                    </form>
+                </Overlay>
             );
         },
 
@@ -280,6 +334,8 @@ var BGForm = React.createClass({
 
                 this.state.value = '';
                 this.state.note = '';
+
+                this.props.hideOnClick();
             }
 
 
