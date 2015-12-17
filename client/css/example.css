@@ -40,6 +40,11 @@ body {
 
 .app-body {padding-top: 75px;}
 
+.status-bar {text-align: center; color: #ffffff}
+
+.status-bar.connected {background-color: #4CD964;}
+.status-bar.connecting {background-color: #FFCC00;}
+.status-bar.waiting {background-color: #FF2D55;}
 
 /* Text Alignment */
 .left-text {text-align: left !important;}

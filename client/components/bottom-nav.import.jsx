@@ -7,6 +7,7 @@ import { _, ReactBootstrap, ReactRouterBootstrap, Router, moment } from 'app-dep
 var { Navbar, CollapsibleNav, Nav, NavItem, DropdownButton, MenuItem, Glyphicon } = ReactBootstrap;
 var { Link } = Router;
 var { NavItemLink, MenuItemLink } = ReactRouterBootstrap;
+import ConnectionStatus from 'client/components/connection-status';
 
 // Meteor components for navigation. Uses ReactBootstrap and
 // ReactRouterBootstrap to manage the state of which tab is highlighted.
@@ -68,6 +69,7 @@ export default React.createClass({
                         className="circle-btn"
                         onClick={() => this.toggleMenuState()}><Glyphicon glyph="menu-hamburger" /></button>
                 </div>
+                <ConnectionStatus />
 
             </footer>
         );
