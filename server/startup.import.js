@@ -3,7 +3,7 @@
 "use strict";
 
 import { _ } from 'app-deps';
-import 'lib/models/readingModel';
+import 'lib/models/entryModel';
 import 'lib/models/userModel';
 // imports with side-effects
 import 'lib/models';

@@ -4,14 +4,14 @@
 
 import  { _, moment, bootbox, ReactBootstrap, Swipeable, SwipeToRevealOptions } from 'app-deps';
 import Loading from 'client/components/loading';
-import { Readings } from 'lib/models/readingModel';
+import { Entries } from 'lib/models/entryModel';
 
 var { Input, Button, ButtonToolbar, Glyphicon } = ReactBootstrap;
 
 // An example of an application-specific component.
 
 export default React.createClass({
-    displayName: 'Readings',
+    displayName: 'Entries',
     mixins: [ReactMeteorData],
     getInitialState: function() {
         return {
@@ -29,11 +29,11 @@ export default React.createClass({
         // in Meteor, the function will be re-run and the component re-rendered.
 
         var user = Meteor.user();
-        var subscriptionHandle = Meteor.subscribe("readings");
+        var subscriptionHandle = Meteor.subscribe("entries");
 
         return {
             loading: !subscriptionHandle.ready(),
-            readings: Readings.find({}, {sort: {created_at: -1}}).fetch(),
+            entries: Entries.find({}, {sort: {created_at: -1}}).fetch(),
             canWrite: user? Roles.userIsInRole(user, ['write', 'admin']) : false,
         };
     },
@@ -61,7 +61,7 @@ export default React.createClass({
                     <button className="rounded-btn" onClick={this.showForm}><Glyphicon glyph="plus"/> Add Entry</button>
                 </div>
                 <div className="reading-rows" style={{marginBottom: "20px"}}>
-                    <ReadingsList readings={this.data.readings} />
+                    <EntriesList entries={this.data.entries} />
                 </div>
             </div>
         );
@@ -69,18 +69,18 @@ export default React.createClass({
 
 });
 
-var ReadingsList = React.createClass({
-    displayName: "ReadingsList",
+var EntriesList = React.createClass({
+    displayName: "EntriesList",
     mixins: [React.addons.PureRenderMixin],
 
     propTypes: {
-        readings: React.PropTypes.arrayOf(Date).isRequired
+        entries: React.PropTypes.arrayOf(Date).isRequired
     },
 
     render: function() {
         return (
             <div style={{marginTop: '30px'}}>
-            {this.props.readings.map(t => {
+            {this.props.entries.map(t => {
                 return (
                     <ReadingRow reading={t} key={t._id}/>
                 );
@@ -92,6 +92,7 @@ var ReadingsList = React.createClass({
 });
 
 var ReadingRow = React.createClass({
+    displayName: "EntryRow",
 
     getInitialState: function() {
         return {
@@ -106,10 +107,10 @@ var ReadingRow = React.createClass({
     },
 
     editReading: function() {
-        Readings.remove(this.props.reading._id);
+        Entries.remove(this.props.reading._id);
     },
     deleteReading: function() {
-        Readings.remove(this.props.reading._id);
+        Entries.remove(this.props.reading._id);
     },
 
     getReadingClass: function(){
@@ -250,7 +251,9 @@ var BGForm = React.createClass({
         getInitialState: function() {
             return {
                 value: '',
-                note: ''
+                note: '',
+                insulin_food: '',
+                insulin_correction: ''
             };
         },
 
@@ -271,7 +274,10 @@ var BGForm = React.createClass({
         handleChange: function() {
             this.setState({
                 value: this.refs.input.getValue(),
-                note: this.refs.note.getValue()
+                note: this.refs.note.getValue(),
+                carbs: this.refs.carbs.getValue(),
+                insulin_food: this.refs.insulin_food.getValue(),
+                insulin_correction: this.refs.insulin_correction.getValue(),
             });
         },
 
@@ -288,6 +294,7 @@ var BGForm = React.createClass({
             return (
                 <Overlay showForm={this.props.showForm} hideOnClick={this.props.hideOnClick}>
                     <form onSubmit={this.newReading} style={{textAlign: 'center'}}>
+                        <label>Blood Glucose</label>
                         <Input
                             type="number"
                             value={this.state.value}
@@ -299,12 +306,53 @@ var BGForm = React.createClass({
                             onChange={this.handleChange}
                             className="reading-input"
                             />
+
+                        <label>Carbs</label>
+                        <Input
+                            type="text"
+                            value={this.state.carbs}
+                            placeholder="25g"
+                            hasFeedback
+                            ref="carbs"
+                            groupClassName="group-class tide-input"
+                            labelClassName="label-class"
+                            onChange={this.handleChange}
+                            className="reading-input"
+                            />
+
+                        <label>Note</label>
                         <Input
                             type="text"
                             value={this.state.note}
                             placeholder="Note"
                             hasFeedback
                             ref="note"
+                            groupClassName="group-class tide-input"
+                            labelClassName="label-class"
+                            onChange={this.handleChange}
+                            className="reading-input"
+                            />
+
+                        <label>Insulin (Food)</label>
+                        <Input
+                            type="text"
+                            value={this.state.insulin_food}
+                            placeholder="Units"
+                            hasFeedback
+                            ref="insulin_food"
+                            groupClassName="group-class tide-input"
+                            labelClassName="label-class"
+                            onChange={this.handleChange}
+                            className="reading-input"
+                            />
+
+                        <label>Insulin (Correction)</label>
+                        <Input
+                            type="text"
+                            value={this.state.insulin_correction}
+                            placeholder="Units"
+                            hasFeedback
+                            ref="insulin_correction"
                             groupClassName="group-class tide-input"
                             labelClassName="label-class"
                             onChange={this.handleChange}
@@ -324,16 +372,22 @@ var BGForm = React.createClass({
 
             }
             else {
-                Readings.insert({
+                Entries.insert({
                     created_at: now,
                     label: '',
                     note: this.state.note,
+                    carbs: this.state.carbs,
                     reading: this.state.value,
+                    insulin_food: this.state.insulin_food,
+                    insulin_correction: this.state.insulin_correction,
                     user_id: Meteor.userId()
                 });
 
                 this.state.value = '';
                 this.state.note = '';
+                this.state.carbs = '';
+                this.state.insulin_food = '';
+                this.state.insulin_correction = '';
 
                 this.props.hideOnClick();
             }
@@ -347,7 +401,7 @@ var ClearButton = React.createClass({
     mixins: [React.addons.PureRenderMixin],
 
     propTypes: {
-        readings: React.PropTypes.arrayOf(Date).isRequired
+        entries: React.PropTypes.arrayOf(Date).isRequired
     },
 
     render: function() {
@@ -359,8 +413,8 @@ var ClearButton = React.createClass({
     clearAll: function() {
         bootbox.confirm("Are you sure?", result => {
             if (result) {
-                this.props.readings.forEach(t => {
-                    Readings.remove(t._id);
+                this.props.entries.forEach(t => {
+                    Entries.remove(t._id);
                 });
             }
         });
