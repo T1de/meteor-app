@@ -2,9 +2,10 @@
 /* global Meteor, React, ReactMeteorData, Roles */
 "use strict";
 
-import { _, ReactBootstrap, ReactRouterBootstrap, Router, moment } from 'app-deps';
+import { _, ReactBootstrap, ReactRouterBootstrap, Router, moment, FontAwesome } from 'app-deps';
 
 export default React.createClass({
+    mixins: [ReactMeteorData],
     displayName: 'ConnectionStatus',
     getInitialState: function() {
         return {
@@ -19,6 +20,7 @@ export default React.createClass({
         return {
             user: user,
             isAdmin: user? Roles.userIsInRole(user, ['admin']) : false,
+            connectionStatus: Meteor.status().status
         };
     },
     getConnectionStatus: function() {
@@ -28,46 +30,35 @@ export default React.createClass({
 
         if(this.state.connectionStatus === 'connecting'){
             animatedClass =' animated slideInDown';
-            connectionClass = 'connecting' + animatedClass;
+            connectionClass = 'connecting';
         }
         else if(this.state.connectionStatus === 'connected') {
             animatedClass =' animated slideInDown';
-            connectionClass = 'connected' + animatedClass;
+            connectionClass = 'connected';
         }
         else if(this.state.connectionStatus === 'waiting') {
             animatedClass =' animated slideInDown';
-            connectionClass = 'waiting' + animatedClass;
+            connectionClass = 'waiting';
         }
 
         this.setState(
             {
                 connectionStatus: Meteor.status().status,
-                connectionClass: connectionClass
+                connectionClass: connectionClass + animatedClass
             }
         );
     },
-    startPolling: function() {
-        var self = this;
-        setTimeout(function() {
-            if (!self.isMounted()) { return; } // abandon
-            self.getConnectionStatus(); // do it once and then start it up ...
-            self._timer = setInterval(self.getConnectionStatus.bind(self), 1000);
-        }, 1000);
-    },
     componentDidMount: function() {
-        this.startPolling();
+        //this.startPolling();
     },
     componentWillUnmount: function() {
-        if (this._timer) {
-            clearInterval(this._timer);
-            this._timer = null;
-        }
-    },
 
+    },
     render: function() {
 
         return (
-            <div className={'status-bar ' + this.state.connectionStatus}>{this.state.connectionStatus}</div>
+            <div className={'status-bar ' + this.data.connectionStatus}>{this.data.connectionStatus}
+            </div>
         );
     },
 

@@ -63,60 +63,82 @@ var NutritionSearch = React.createClass({
             searchTimeout: ''
         };
     },
-    performSearch: function() {
-
-        var timeoutId = '';
+    componentWillMount: function() {
+        this.performSearch = _.debounce(this.performSearch,300);
+    },
+    performSearch: function(){
 
         var searchValue = this.refs.nux_search.getValue();
 
         var component = this;
 
-        if(component.state.searchTimeout) {
-            console.log('timeoutId: ' + component.state.searchTimeout);
-            clearTimeout(component.state.searchTimeout);
+        if(searchValue) {
+            Meteor.call('autoComplete', searchValue,
+                function (error, data) {
+                    console.log(error, data.data);
+                    component.setState(
+                        {value: '', search: data.data, searchTimeout: ''}
+                    );
+                }
+            );
         }
-        else {
-
-            timeoutId = setTimeout(function () {
-
-                component.setState({
-                    value: component.refs.nux_search.getValue(),
-                    search: component.state.search,
-                    searchTimeout: ''
-                });
-                Meteor.call('search', component.refs.nux_search.getValue(),
-                    function (error, data) {
-                        console.log(data.data);
-                        component.setState(
-                            {value: component.refs.nux_search.getValue(), search: data.data.hits, searchTimeout: ''}
-                        );
-
-                    }
-                );
-            }, 400);
-        }
-
-        this.setState({value: searchValue, search: this.state.search, searchTimeout: timeoutId});
     },
-
+    //
+    //    function() {
+    //
+    //    var timeoutId = '';
+    //
+    //    var searchValue = this.refs.nux_search.getValue();
+    //
+    //    var component = this;
+    //
+    //    if(component.state.searchTimeout) {
+    //        console.log('timeoutId: ' + component.state.searchTimeout);
+    //        clearTimeout(component.state.searchTimeout);
+    //    }
+    //    else {
+    //
+    //        timeoutId = setTimeout(function () {
+    //
+    //            component.setState({
+    //                value: component.refs.nux_search.getValue(),
+    //                search: component.state.search,
+    //                searchTimeout: ''
+    //            });
+    //            Meteor.call('autoComplete', component.refs.nux_search.getValue(),
+    //                function (error, data) {
+    //                    console.log(error, data.data);
+    //                    component.setState(
+    //                        {value: component.refs.nux_search.getValue(), search: data.data, searchTimeout: ''}
+    //                    );
+    //                }
+    //            );
+    //        }, 400);
+    //    }
+    //
+    //    this.setState({value: searchValue, search: this.state.search, searchTimeout: timeoutId});
+    //},
+    handleChange: function() {
+        var searchValue = this.refs.nux_search.getValue();
+        this.performSearch(searchValue);
+    },
 
     render: function() {
         return (
             <div className="tide-input" style={{color: 'white'}}>
                 <div className="tide-row">
                     <Glyphicon glyph="search"/>
-
                     <Input
                         type="text"
-                        value={this.state.value}
+                        //value={this.state.value}
                         placeholder="Search for food item"
                         ref="nux_search"
                         groupClassName="tide-input"
                         labelClassName="laabel-class"
                         style={{display: 'inline-block'}}
                         onChange={this.performSearch}/>
-                    <NutritionList results={this.state.search}/>
                 </div>
+                <NutritionList results={this.state.search}/>
             </div>
         );
     }
@@ -132,15 +154,14 @@ var NutritionList = React.createClass({
 
     render: function() {
         return (
-            <table className="table table-striped">
-                <tbody>
-                {this.props.results.map(function(t){
+            <div>
+                {this.props.results.map(function(obj, key){
+                    console.log(obj);
                     return (
-                        <NutritionItem item={t}/>
+                        <NutritionItem item={obj} key={obj.id}/>
                     );
                 })}
-                </tbody>
-            </table>
+            </div>
         );
     }
 });
@@ -157,19 +178,17 @@ var NutritionItem = React.createClass({
     },
 
     render: function() {
-        if(!this.props.item.fields){
-            return (<tr><td></td></tr>);
+        if(!this.props.item){
+            return (<div></div>);
         }
         else {
             return (
-                <tr>
-                    <td key={this.props.item._id}>{this.props.item.fields.item_name}</td>
-                    <td>
-                        <button className="btn btn-primary" onClick={() => this.selectItem(this.props.item.fields.item_id)}>
-                            Select
-                        </button>
-                    </td>
-                </tr>
+                <div className="tide-row">
+                    {this.props.item.text}
+                    <button className="btn btn-primary" onClick={() => this.selectItem(this.props.item.id)}>
+                        Select
+                    </button>
+                </div>
             );
         }
     }

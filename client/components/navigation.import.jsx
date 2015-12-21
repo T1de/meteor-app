@@ -2,7 +2,7 @@
 /* global Meteor, React, ReactMeteorData, Roles */
 "use strict";
 
-import { _, ReactBootstrap, ReactRouterBootstrap, Router, moment } from 'app-deps';
+import { _, ReactBootstrap, ReactRouterBootstrap, Router, moment, FontAwesome } from 'app-deps';
 
 var { Navbar, CollapsibleNav, Nav, NavItem, DropdownButton, MenuItem, Glyphicon, Row } = ReactBootstrap;
 var { Link } = Router;

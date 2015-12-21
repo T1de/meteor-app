@@ -136,7 +136,7 @@ var ReadingRow = React.createClass({
     },
 
     leftOptions: [{
-        label: 'Trash',
+        label: 'Delete',
         class: 'trash',
         action: function() {
             if(this.state.open == 'hide'){
@@ -173,7 +173,7 @@ var ReadingRow = React.createClass({
                 <div className="reading-row">
                     <div className="reading-body" >
                         <div className={this.getReadingClass() + ' reading'}>{this.props.reading.reading}<span className="reading-label">mg/dl</span></div>
-                        <div className="" style={{display: 'inline-block', width: 'auto', padding: '20px'}}>
+                        <div className="" style={{display: 'inline-block', width: 'auto', padding: '0 20px'}}>
                             <div className="">{this.props.reading.note}</div>
                             <div className={this.getReadingClass() + ''}>{moment(this.props.reading.created_at).fromNow()}</div>
                         </div>
@@ -182,16 +182,6 @@ var ReadingRow = React.createClass({
                         <div className="reading-details-row">
                             <div className="left">Note:</div>
                             <div className="right">{this.props.reading.note}</div>
-                        </div>
-                        <div className="reading-details-row">
-                            <div>
-                            <button className="tide-btn btn-half" onClick={this.editReading}>
-                                Edit
-                            </button>
-                            <button className="tide-btn btn-half danger" onClick={this.deleteReading}>
-                                Delete
-                            </button>
-                            </div>
                         </div>
                     </div>
                 </div>

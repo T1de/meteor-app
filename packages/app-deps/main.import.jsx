@@ -13,3 +13,5 @@ export const ReactBootstrap = Dependencies.ReactBootstrap;
 export const ReactRouterBootstrap = Dependencies.ReactRouterBootstrap;
 export const Swipeable = Dependencies.Swipeable;
 export const SwipeToRevealOptions = Dependencies.SwipeToRevealOptions;
+export const FontAwesome = Dependencies.FontAwesome;
+export const Chart = Dependencies.Chart;

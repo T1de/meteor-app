@@ -24,5 +24,8 @@ Dependencies = {
     ReactBootstrap: require('react-bootstrap'),
     ReactRouterBootstrap: require('react-router-bootstrap'),
     Swipeable: require('react-swipeable'),
-    SwipeToRevealOptions: require('react-swipe-to-reveal-options')
+    SwipeToRevealOptions: require('react-swipe-to-reveal-options'),
+    FontAwesome: require('react-fontawesome'),
+    Chart: require('react-chartjs')
+
 };

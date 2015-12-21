@@ -2,7 +2,7 @@
 /* global Meteor, React, ReactMeteorData, Roles */
 "use strict";
 
-import { _, ReactBootstrap, ReactRouterBootstrap, Router, moment } from 'app-deps';
+import { _, ReactBootstrap, ReactRouterBootstrap, Router, moment, FontAwesome } from 'app-deps';
 
 var { Navbar, CollapsibleNav, Nav, NavItem, DropdownButton, MenuItem, Glyphicon } = ReactBootstrap;
 var { Link } = Router;
@@ -48,29 +48,18 @@ export default React.createClass({
     render: function() {
         return (
             <footer>
-                <div className="container">
-                    <div className={this.state.menu} style={{position: "relative", overflow: 'hidden'}}>
-                        <button onClick={() => this.handleClick('readings')} style={{color: '#FF1300', borderRadius: '75px', width: '75px', height: '75px', display: 'block', margin: '10px auto', fontSize: '24px'}}
-                                className="circle-btn toggleNav"><Glyphicon glyph="tint" />
-                        </button>
-                        <button style={{borderRadius: '75px', width: '75px', height: '75px', display: 'block', margin: '10px auto', fontSize: '24px'}}
-                                className="circle-btn toggleNav2"
-                                onClick={() => this.handleClick('profile')}><Glyphicon glyph="user" />
-                        </button>
-                        <button style={{color: '#4CD964', borderRadius: '75px', width: '75px', height: '75px', display: 'block', margin: '10px auto', fontSize: '24px'}}
-                                className="circle-btn toggleNav3"
-                                onClick={() => this.handleClick('meals')}><Glyphicon glyph="apple" />
-                        </button>
-                    </div>
-                </div>
                 <div className="bottom-nav-bar">
-                    <button
-                        style={{borderRadius: '75px', width: '75px', height: '75px', margin: '10px 0', fontSize: '24px'}}
-                        className="circle-btn"
-                        onClick={() => this.toggleMenuState()}><Glyphicon glyph="menu-hamburger" /></button>
+                    <button onClick={() => this.handleClick('readings')} className="bottom-nav-btn">
+                        <Glyphicon glyph="tint" />
+                    </button>
+                    <button className="bottom-nav-btn" onClick={() => this.handleClick('profile')}>
+                        <Glyphicon glyph="user" />
+                    </button>
+                    <button className="bottom-nav-btn" onClick={() => this.handleClick('meals')}>
+                        <Glyphicon glyph="apple" />
+                    </button>
                 </div>
                 <ConnectionStatus />
-
             </footer>
         );
 

@@ -25,7 +25,9 @@ Npm.depends({
     "bootbox": "4.4.0",
     "nutritionix": "0.6.1",
     "react-swipeable": "3.0.2",
-    "react-swipe-to-reveal-options": "0.2.0"
+    "react-swipe-to-reveal-options": "0.2.0",
+    "react-fontawesome": "0.2.3",
+    "react-chartjs": "0.6.0"
 
 });
 

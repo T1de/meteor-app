@@ -12,6 +12,8 @@ Dependencies = {
         appKey: 'c657dfac9946c562366e1d592ef3d97f'
     }, false),
     Swipeable: Npm.require('react-swipeable'),
-    SwipeToRevealOptions: Npm.require('react-swipe-to-reveal-options')
+    SwipeToRevealOptions: Npm.require('react-swipe-to-reveal-options'),
+    FontAwesome: Npm.require('react-fontawesome'),
+    Chart: Npm.require('react-chartjs')
 
 };
