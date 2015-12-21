@@ -530,6 +530,8 @@ input.tide-input {display: inline-block;}
 .trash {
     color: #FFF;
     background: #FF3B30;
+    padding: 40px 0;
+    text-align: right;
 }
 
 .toggleNav {
