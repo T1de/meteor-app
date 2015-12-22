@@ -27,7 +27,8 @@ Npm.depends({
     "react-swipeable": "3.0.2",
     "react-swipe-to-reveal-options": "0.2.0",
     "react-fontawesome": "0.2.3",
-    "react-chartjs": "0.6.0"
+    "react-chartjs": "0.6.0",
+    "react-d3": "0.4.0"
 
 });
 

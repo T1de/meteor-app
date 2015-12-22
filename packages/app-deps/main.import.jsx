@@ -15,3 +15,4 @@ export const Swipeable = Dependencies.Swipeable;
 export const SwipeToRevealOptions = Dependencies.SwipeToRevealOptions;
 export const FontAwesome = Dependencies.FontAwesome;
 export const Chart = Dependencies.Chart;
+export const D3 = Dependencies.D3;

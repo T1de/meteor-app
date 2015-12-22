@@ -9,6 +9,7 @@ import { AdminUsers, CreateUser } from 'client/components/users';
 
 import App from 'client/components/app';
 import Home from 'client/components/home';
+import Stats from 'client/components/stats';
 import Readings from 'client/components/readings';
 import Meals from 'client/components/meals';
 import Profile from 'client/components/profile';
@@ -38,6 +39,7 @@ Meteor.startup(() => {
             <Route name="readings" path="readings" handler={Readings}/>
             <Route name="meals" path="meals" handler={Meals}/>
             <Route name="profile" path="profile" handler={Profile}/>
+            <Route name="stats" path="stats" handler={Stats}/>
 
 
             // Administration

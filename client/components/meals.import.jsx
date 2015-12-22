@@ -66,6 +66,9 @@ var NutritionSearch = React.createClass({
     componentWillMount: function() {
         this.performSearch = _.debounce(this.performSearch,300);
     },
+    componentWillUnmount: function() {
+        this.performSearch = '';
+    },
     performSearch: function(){
 
         var searchValue = this.refs.nux_search.getValue();

@@ -45,17 +45,27 @@ export default React.createClass({
         this.toggleMenuState();
     },
 
+    getActiveClassName: function(pathToCheck) {
+      var path;
+        path = window.location.pathname;
+        if(path == pathToCheck) {
+            return 'bottom-nav-btn active';
+        }
+        else {
+            return 'bottom-nav-btn';
+        }
+    },
     render: function() {
         return (
             <footer>
                 <div className="bottom-nav-bar">
-                    <button onClick={() => this.handleClick('readings')} className="bottom-nav-btn">
+                    <button onClick={() => this.handleClick('readings')} className={this.getActiveClassName('/readings')}>
                         <Glyphicon glyph="tint" />
                     </button>
-                    <button className="bottom-nav-btn" onClick={() => this.handleClick('profile')}>
-                        <Glyphicon glyph="user" />
+                    <button className={this.getActiveClassName('/stats')} onClick={() => this.handleClick('stats')}>
+                        <Glyphicon glyph="stats" />
                     </button>
-                    <button className="bottom-nav-btn" onClick={() => this.handleClick('meals')}>
+                    <button className={this.getActiveClassName('/meals')} onClick={() => this.handleClick('meals')}>
                         <Glyphicon glyph="apple" />
                     </button>
                 </div>

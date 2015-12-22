@@ -14,8 +14,8 @@ export default React.createClass({
 
     render: function() {
         return (
-            <div className="home-page">
-
+            <div className="app-body">
+                <h1>Welcome, {Meteor.user().profile.first_name}</h1>
             </div>
         );
     }

@@ -14,6 +14,7 @@ Dependencies = {
     Swipeable: Npm.require('react-swipeable'),
     SwipeToRevealOptions: Npm.require('react-swipe-to-reveal-options'),
     FontAwesome: Npm.require('react-fontawesome'),
-    Chart: Npm.require('react-chartjs')
+    Chart: Npm.require('react-chartjs'),
+    D3: Npm.require('react-d3')
 
 };

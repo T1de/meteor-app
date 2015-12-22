@@ -28,9 +28,9 @@ export default React.createClass({
     render: function() {
 
         return (
-            <Row>
-                <Navbar brand={<Link to="home"><Glyphicon glyph="menu-hamburger" /></Link>}  fixedTop toggleNavKey={0} className="navbar-tide">
-                </Navbar>
+            <Row className="top-nav">
+                <Link to="home"><Glyphicon glyph="menu-hamburger" /></Link>
+                <Link to="profile" style={{float: 'right'}}><Glyphicon glyph="user" /></Link>
             </Row>
         );
     },
