@@ -55,13 +55,10 @@ export var Login = React.createClass({
     render: function() {
         return (
             <div>
-                <Grid>
+                <Grid className='login-page' style={{marginTop: '75px'}}>
                     <Row>
-                        <Col xs={8} xsOffset={2}>
-                            <h2 className="form-signin-heading center-text">Log in</h2>
-                        </Col>
+                        <h1>Login</h1>
                     </Row>
-
                 </Grid>
                 <div className="login-buttons signup">
                     <form className="form-signin tide-input" onSubmit={this.onSubmit}>
