@@ -18,7 +18,7 @@ export default React.createClass({
         willTransitionTo: function(transition, params) {
             // Redirect to /login if we land here without a valid user
             var user = Meteor.user();
-            if(user === null) {
+            if(user === null || typeof user == "undefined") {
                 transition.redirect('/landing');
             }
         }
