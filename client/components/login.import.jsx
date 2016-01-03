@@ -22,14 +22,14 @@ export var LandingPage = React.createClass({
                     <h1>to</h1>
                     <h1>T1de</h1>
                 </Row>
-                <Row className="login-buttons">
+                <div className="login-buttons">
                     <Link to="login">
                         <button className="login">Sign In</button>
                     </Link>
                     <Link to="login">
                         <button className="login">New Account</button>
                     </Link>
-                </Row>
+                </div>
             </Grid>
         );
     },
