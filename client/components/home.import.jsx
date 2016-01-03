@@ -12,10 +12,16 @@ var { Link } = Router;
 export default React.createClass({
     displayName: 'Home',
 
+    getInitialState: function() {
+      return {
+          first_name: Meteor.user().profile.first_name || ''
+      }
+    },
+
     render: function() {
         return (
             <div className="app-body">
-                <h1>Welcome, {Meteor.user().profile.first_name}</h1>
+                <h1>Welcome, {this.state.first_name}</h1>
             </div>
         );
     }
